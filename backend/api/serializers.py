@@ -1,14 +1,13 @@
 import base64
 
+from api.constants import MIN_COOKING_TIME, MIN_INGREDIENT_AMOUNT
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.files.base import ContentFile
 from django.db import IntegrityError, transaction
-from rest_framework import serializers
-
 from recipes.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
                             ShoppingCart, Tag)
-from api.constants import MIN_COOKING_TIME, MIN_INGREDIENT_AMOUNT
+from rest_framework import serializers
 from users.models import User
 
 

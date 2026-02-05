@@ -1,9 +1,8 @@
+from api.constants import RECIPE_NAME_MAX_LENGTH
 from django.contrib import admin
 from django.db.models import Count
 from django.utils.html import format_html
 from django.utils.text import Truncator
-
-from api.constants import RECIPE_NAME_MAX_LENGTH
 from recipes.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
                             ShoppingCart, Tag)
 

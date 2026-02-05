@@ -1,18 +1,5 @@
 import base64
 
-from django.db.models import BooleanField, Count, Exists, OuterRef, Sum, Value
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404
-from djoser.views import UserViewSet as DjoserUserViewSet
-from rest_framework import status
-from rest_framework.decorators import action
-from rest_framework.exceptions import ValidationError
-from rest_framework.permissions import (AllowAny, IsAuthenticated,
-                                        IsAuthenticatedOrReadOnly)
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
-
 from api.filters import NameSearchFilter
 from api.pagination import BasePagination
 from api.permissions import IsAuthorOrReadOnly
@@ -22,8 +9,20 @@ from api.serializers import (FavoriteSerializer, IngredientSerializer,
                              ShoppingCartSerializer, SubscriptionSerializer,
                              TagSerializer, UserCreateSerializer,
                              UserSerializer)
+from django.db.models import BooleanField, Count, Exists, OuterRef, Sum, Value
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from djoser.views import UserViewSet as DjoserUserViewSet
 from recipes.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
                             ShoppingCart, Tag)
+from rest_framework import status
+from rest_framework.decorators import action
+from rest_framework.exceptions import ValidationError
+from rest_framework.permissions import (AllowAny, IsAuthenticated,
+                                        IsAuthenticatedOrReadOnly)
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from users.models import Subscription, User
 
 

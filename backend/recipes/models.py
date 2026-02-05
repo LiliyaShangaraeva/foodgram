@@ -1,8 +1,7 @@
-from django.db import models
-
 from api.constants import (INGREDIENT_MEASUREMENT_UNIT_MAX_LENGTH,
                            INGREDIENT_NAME_MAX_LENGTH, NAME_MAX_LENGTH,
                            TAG_NAME_MAX_LENGTH, TAG_SLUG_MAX_LENGTH)
+from django.db import models
 from users.models import User
 
 

@@ -1,7 +1,6 @@
+from api.views import ShortLinkView
 from django.contrib import admin
 from django.urls import include, path
-
-from api.views import ShortLinkView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
