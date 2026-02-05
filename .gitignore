@@ -1,6 +1,8 @@
 frontend/node_modules
 infra/frontend/build
 .env
+convert_ingredients.py
+create_tags_fixtures.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

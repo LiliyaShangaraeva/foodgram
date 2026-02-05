@@ -1,0 +1,26 @@
+[
+    {
+        "model": "recipes.tag",
+        "pk": 1,
+        "fields": {
+            "name": "Завтрак",
+            "slug": "breakfast"
+        }
+    },
+    {
+        "model": "recipes.tag",
+        "pk": 2,
+        "fields": {
+            "name": "Обед",
+            "slug": "dinner"
+        }
+    },
+    {
+        "model": "recipes.tag",
+        "pk": 3,
+        "fields": {
+            "name": "Ужин",
+            "slug": "lunch"
+        }
+    }
+]
