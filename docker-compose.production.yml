@@ -20,9 +20,9 @@ services:
   frontend:
     env_file: .env
     image: liliyashangaraeva/foodgram_frontend
-    command: cp -r /app/result_build/. /static/
+    command: cp -r /app/build/. /frontend_static/
     volumes:
-      - static:/static
+      - static:/frontend_static
   gateway:
     image: liliyashangaraeva/foodgram_gateway
     env_file: .env
