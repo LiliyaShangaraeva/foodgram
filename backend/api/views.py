@@ -50,7 +50,7 @@ class UserViewSet(DjoserUserViewSet):
         return mapping.get(self.action, UserSerializer)
 
     def get_queryset(self):
-        """Переопределяем queryset для подписок."""
+        """Возвращает queryset в зависимости от действия."""
         if self.action == 'list':
             return User.objects.all()
         if self.action == 'subscriptions':

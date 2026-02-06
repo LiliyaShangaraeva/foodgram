@@ -19,16 +19,16 @@ const Technologies = () => {
           <div className={styles.text}>
             <ul className={styles.textItem}>
               <li className={styles.textItem}>
-                Python
+                Python 3.12
               </li>
               <li className={styles.textItem}>
-                Django
+                Django 5.1.5
               </li>
               <li className={styles.textItem}>
-                Django REST Framework
+                Django REST Framework 3.16.1
               </li>
               <li className={styles.textItem}>
-                Djoser
+                Djoser 2.3.3
               </li>
             </ul>
           </div>
