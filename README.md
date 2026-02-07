@@ -65,9 +65,16 @@ sudo docker compose -f docker-compose.production.yml up -d --build
 ```bash
 sudo docker compose -f docker-compose.production.yml exec backend python manage.py migrate
 sudo docker compose -f docker-compose.production.yml exec backend python manage.py collectstatic
+sudo docker compose -f docker-compose.production.yml exec backend cp -r /app/collected_static/. /backend_static/static/
 ```
 
-### Для запуска автоматического деплоя:
+### 5. Загрузите ингредиенты и теги
+
+```bash
+sudo docker compose -f docker-compose.production.yml exec backend python manage.py loaddata ingredients tags
+```
+
+### 6. Для запуска автоматического деплоя:
 
 Запустите проект локально → проверьте, что всё работает → сделайте коммит → залейте в main
 
@@ -79,7 +86,7 @@ git push origin main
 
 Это запустит автоматический деплой — и проект обновится на сервере.
 
-### 5. Создайте суперпользователя (если нужно)
+### 7. Создайте суперпользователя (если нужно)
 
 ```bash
 sudo docker compose -f docker-compose.production.yml exec backend python manage.py createsuperuser

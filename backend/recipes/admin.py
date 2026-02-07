@@ -33,22 +33,37 @@ class RecipeAdmin(admin.ModelAdmin):
         'short_name',
         'author',
         'cooking_time',
-        'favorites_count'
+        'recipe_tags',
     )
     list_filter = ('tags', 'author')
     search_fields = ('name', 'author__username')
-    filter_horizontal = ('tags',)
+    readonly_fields = ('favorites_count',)
+    fields = (
+        'name',
+        'text',
+        'cooking_time',
+        'ingredients',
+        'tags',
+        'author',
+        'image',
+        'favorites_count',
+    )
 
     def get_queryset(self, request):
         """Добавляет к каждому рецепту поле favorites_count."""
         return super().get_queryset(request).annotate(
             favorites_count=Count('favorited_by')
-        )
+        ).prefetch_related('tags')
 
-    @admin.display(description='В избранном', ordering='favorites_count')
+    @admin.display(description='В избранном')
     def favorites_count(self, obj):
         """Возвращает количество добавлений рецепта в избранное."""
         return getattr(obj, 'favorites_count', 0)
+
+    @admin.display(description='Теги')
+    def recipe_tags(self, obj):
+        """Возвращает список имён тегов рецепта через запятую."""
+        return ", ".join(tag.name for tag in obj.tags.all())
 
     @admin.display(description='Название', ordering='name')
     def short_name(self, obj):
@@ -68,7 +83,8 @@ class RecipeIngredientAdmin(admin.ModelAdmin):
     """Админка для связывающей модели рецпты-ингредиенты."""
 
     list_display = ('recipe', 'ingredient', 'amount')
-    list_filter = ('recipe', 'ingredient')
+    list_filter = ('recipe',)
+    search_fields = ('ingredient__name', 'recipe__name')
 
 
 @admin.register(Favorite)
