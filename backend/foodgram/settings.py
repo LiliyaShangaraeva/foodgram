@@ -12,10 +12,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', get_random_secret_key())
 
 DEBUG = os.getenv('DEBUG', 'false').lower() == 'true'
 
-if DEBUG:
-    ALLOWED_HOSTS = ['*']
-else:
-    ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -64,13 +61,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'foodgram.wsgi.application'
 
-CSRF_TRUSTED_ORIGINS = [
-    'https://shangaraeva.ddns.net',
-    'http://shangaraeva.ddns.net',
-    'https://www.shangaraeva.ddns.net',
-]
+DB_ENGINE = os.getenv('DB_ENGINE', 'postgresql')
 
-if DEBUG:
+if DB_ENGINE == 'sqlite':
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -123,7 +116,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 REST_FRAMEWORK = {
-    'EXCEPTION_HANDLER': 'api.exceptions.custom_exception_handler',
+    'EXCEPTION_HANDLER': 'api.exceptions.exception_handler',
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
     ],
@@ -136,10 +129,14 @@ REST_FRAMEWORK = {
 
 DJOSER = {
     'LOGIN_FIELD': 'email',
-    'USER_CREATE_PASSWORD_RETYPE': True,
+    'USER_CREATE_PASSWORD_RETYPE': False,
     'SERIALIZERS': {
-        'user_create': 'api.serializers.UserCreateSerializer',
         'user': 'api.serializers.UserSerializer',
         'current_user': 'api.serializers.UserSerializer',
     },
+    'PERMISSIONS': {
+        'user_list': ['rest_framework.permissions.AllowAny'],
+        'user': ['rest_framework.permissions.AllowAny'],
+        'current_user': ['rest_framework.permissions.IsAuthenticated'],
+    }
 }

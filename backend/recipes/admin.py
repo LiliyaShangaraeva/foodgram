@@ -1,8 +1,9 @@
-from api.constants import RECIPE_NAME_MAX_LENGTH
 from django.contrib import admin
 from django.db.models import Count
 from django.utils.html import format_html
 from django.utils.text import Truncator
+
+from recipes.constants import RECIPE_NAME_MAX_LENGTH
 from recipes.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
                             ShoppingCart, Tag)
 
@@ -24,6 +25,13 @@ class TagAdmin(admin.ModelAdmin):
     search_fields = ('name', 'slug')
 
 
+class RecipeIngredientInline(admin.TabularInline):
+    """Вложенная форма для добавления ингредиентов к рецепту (минимум 1)."""
+
+    model = RecipeIngredient
+    min_num = 1
+
+
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
     """Админка для модели рецептов."""
@@ -35,6 +43,7 @@ class RecipeAdmin(admin.ModelAdmin):
         'cooking_time',
         'recipe_tags',
     )
+    inlines = [RecipeIngredientInline]
     list_filter = ('tags', 'author')
     search_fields = ('name', 'author__username')
     readonly_fields = ('favorites_count',)
@@ -51,7 +60,7 @@ class RecipeAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         """Добавляет к каждому рецепту поле favorites_count."""
         return super().get_queryset(request).annotate(
-            favorites_count=Count('favorited_by')
+            favorites_count=Count('favorited_by_users')
         ).prefetch_related('tags')
 
     @admin.display(description='В избранном')

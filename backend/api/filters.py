@@ -4,28 +4,17 @@ from recipes.models import Recipe
 from rest_framework.filters import SearchFilter
 
 
-class TransformativeBooleanFilter(filters.BooleanFilter):
-    def __init__(self, *args, **kwargs):
-        kwargs['widget'] = BooleanWidget
-        super().__init__(*args, **kwargs)
-
-    def filter(self, queryset, value):
-        if value is None:
-            return queryset
-        if isinstance(value, str):
-            value = value.lower() in ('true', '1')
-
-        if value:
-            return self.method(queryset, self.field_name, True)
-        return self.method(queryset, self.field_name, False)
-
-
 class RecipeFilter(filters.FilterSet):
     """Фильтр для рецептов."""
 
-    is_favorited = TransformativeBooleanFilter(method='filter_is_favorited')
-    is_in_shopping_cart = TransformativeBooleanFilter(
-        method='filter_is_in_shopping_cart')
+    is_favorited = filters.BooleanFilter(
+        method='filter_is_favorited',
+        widget=BooleanWidget,
+    )
+    is_in_shopping_cart = filters.BooleanFilter(
+        method='filter_is_in_shopping_cart',
+        widget=BooleanWidget,
+    )
     tags = filters.AllValuesMultipleFilter(field_name='tags__slug')
 
     class Meta:
@@ -37,9 +26,9 @@ class RecipeFilter(filters.FilterSet):
         super().__init__(*args, **kwargs)
 
     def _boolean_filter(self, queryset, name, value, filter_field):
-        user = self.request.user if self.request else None
+        user = getattr(self.request, 'user', None)
         if not user or not user.is_authenticated:
-            return queryset.none()
+            return queryset
 
         filter_kwargs = {filter_field: user}
 
@@ -50,13 +39,13 @@ class RecipeFilter(filters.FilterSet):
     def filter_is_favorited(self, queryset, name, value):
         return self._boolean_filter(
             queryset, name, value,
-            filter_field='favorited_by__user',
+            filter_field='favorited_by_users__user',
         )
 
-    def filter_is_in_shopping_cart(self, queryset, name, value):
+    def filter_is_shopping_cart_users(self, queryset, name, value):
         return self._boolean_filter(
             queryset, name, value,
-            filter_field='in_shopping_cart__user',
+            filter_field='shopping_cart_users__user',
         )
 
 
