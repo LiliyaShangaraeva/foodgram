@@ -1,7 +1,7 @@
 [![Main Foodgram workflow](https://github.com/LiliyaShangaraeva/foodgram/actions/workflows/main.yml/badge.svg)](https://github.com/LiliyaShangaraeva/foodgram/actions/workflows/main.yml)
-# 🍽️ Foodgram — Сервис для публикации рецептов и подписки на авторов.
+# Foodgram — Сервис для публикации рецептов и подписки на авторов.
 
-## 🌟 Описание проекта
+## Описание проекта
 
 Foodgram — это социальная сеть для гурманов, где можно:
 
@@ -12,7 +12,7 @@ Foodgram — это социальная сеть для гурманов, гд�
 
 ---
 
-## 🛠️ Технологический стек
+## Технологический стек
 
 | Компонент       | Технология               |
 |------------------|--------------------------|
@@ -49,6 +49,7 @@ DB_PORT=5432
 
 SECRET_KEY=django-insecure-your-secret-key-here
 DEBUG=true
+DB_ENGINE=django.db.backends.postgresql
 ALLOWED_HOSTS=your-domain.com,localhost,127.0.0.1,gateway
 ```
 
@@ -71,7 +72,8 @@ sudo docker compose -f docker-compose.production.yml exec backend cp -r /app/col
 ### 5. Загрузите ингредиенты и теги
 
 ```bash
-sudo docker compose -f docker-compose.production.yml exec backend python manage.py loaddata ingredients tags
+sudo docker compose -f docker-compose.production.yml exec backend python manage.py load_ingredients
+sudo docker compose -f docker-compose.production.yml exec backend python manage.py load_tags
 ```
 
 ### 6. Для запуска автоматического деплоя:

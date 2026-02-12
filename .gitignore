@@ -1,8 +1,6 @@
 frontend/node_modules
 infra/frontend/build
 .env
-convert_ingredients.py
-create_tags_fixtures.py
 docker-compose.yml
 
 # Byte-compiled / optimized / DLL files
