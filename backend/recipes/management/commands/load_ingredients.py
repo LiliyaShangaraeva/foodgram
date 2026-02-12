@@ -11,7 +11,7 @@ class Command(BaseCommand):
         parser.add_argument(
             '--path',
             type=str,
-            default='data/ingredients.json',
+            default='backend/data/ingredients.json',
             help='Путь к файлу с ингредиентами'
         )
 
