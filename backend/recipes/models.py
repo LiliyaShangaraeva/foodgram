@@ -151,9 +151,9 @@ class RecipeIngredient(models.Model):
 class UserRecipeRelation(models.Model):
     """Абстрактная модель для связей пользователь–рецепт."""
 
-    user = models.ForeignKey(              # абстрактную модель добавила, но в дочках все равно переопределила поля
-        User,                              # чтобы сохранить related_name
-        on_delete=models.CASCADE,          # и похоже эта модель теперь просто для красоты))
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
         verbose_name='Пользователь'
     )
     recipe = models.ForeignKey(
