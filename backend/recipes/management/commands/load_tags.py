@@ -17,7 +17,7 @@ class Command(BaseCommand):
         for name, slug in self.TAGS:
             _, is_created = Tag.objects.get_or_create(
                 name=name,
-                slug=slug,
+                defaults={'slug': slug},
             )
             if is_created:
                 created += 1
