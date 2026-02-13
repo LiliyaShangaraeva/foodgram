@@ -64,7 +64,6 @@ WSGI_APPLICATION = 'foodgram.wsgi.application'
 CSRF_TRUSTED_ORIGINS = [
     f'https://{host}'
     for host in ALLOWED_HOSTS
-    if host not in ('localhost', '127.0.0.1')
 ]
 
 DB_ENGINE = os.getenv('DB_ENGINE', 'postgresql')
@@ -143,6 +142,7 @@ DJOSER = {
     'PERMISSIONS': {
         'user_list': ['rest_framework.permissions.AllowAny'],
         'user': ['rest_framework.permissions.AllowAny'],
-        'current_user': ['rest_framework.permissions.IsAuthenticated'],
     }
 }
+# если использую 'djoser.permissions.CurrentUserOrAdminOrReadOnly'
+# то api/users/id/ выдает 401 Unauthorized, а должен 200

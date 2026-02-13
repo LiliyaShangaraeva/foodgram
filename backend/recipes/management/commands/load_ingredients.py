@@ -1,20 +1,20 @@
 import json
-from pathlib import Path
 
-from django.conf import settings
 from django.core.management.base import BaseCommand
+from tqdm import tqdm
 
+from recipes.constants import INGREDIENTS_PATH
 from recipes.models import Ingredient
 
 
 class Command(BaseCommand):
-    help = 'Загрузка ингредиентов из data/ingredients.json'
+    help = 'Загрузка ингредиентов из {INGREDIENTS_PATH}'
 
     def add_arguments(self, parser):
         parser.add_argument(
             '--path',
             type=str,
-            default=Path(settings.BASE_DIR) / 'data' / 'ingredients.json',
+            default=INGREDIENTS_PATH,
             help='Путь к файлу с ингредиентами'
         )
 
@@ -32,7 +32,7 @@ class Command(BaseCommand):
 
         created = 0
 
-        for item in data:
+        for item in tqdm(data, desc='Загрузка ингредиентов'):
             _, is_created = Ingredient.objects.get_or_create(
                 name=item['name'],
                 measurement_unit=item['measurement_unit'],

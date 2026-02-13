@@ -2,7 +2,8 @@ from django.core.validators import MinValueValidator
 from django.db import models
 
 from recipes.constants import (INGREDIENT_MEASUREMENT_UNIT_MAX_LENGTH,
-                               INGREDIENT_NAME_MAX_LENGTH, NAME_MAX_LENGTH,
+                               INGREDIENT_NAME_MAX_LENGTH, MIN_COOKING_TIME,
+                               MIN_INGREDIENT_AMOUNT, NAME_MAX_LENGTH,
                                TAG_NAME_MAX_LENGTH, TAG_SLUG_MAX_LENGTH)
 from users.models import User
 
@@ -81,7 +82,7 @@ class Recipe(models.Model):
     )
     cooking_time = models.PositiveSmallIntegerField(
         verbose_name='Время приготовления (минуты)',
-        validators=[MinValueValidator(1)]
+        validators=[MinValueValidator(MIN_COOKING_TIME)]
     )
     tags = models.ManyToManyField(
         Tag,
@@ -126,7 +127,7 @@ class RecipeIngredient(models.Model):
     amount = models.PositiveSmallIntegerField(
         verbose_name='Количество',
         help_text='Укажите количество ингредиента',
-        validators=[MinValueValidator(1)]
+        validators=[MinValueValidator(MIN_INGREDIENT_AMOUNT)]
     )
 
     class Meta:
@@ -154,11 +155,13 @@ class UserRecipeRelation(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
+        related_name='%(class)ss',
         verbose_name='Пользователь'
     )
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
+        related_name='%(class)ss',
         verbose_name='Рецепт'
     )
 
@@ -168,19 +171,6 @@ class UserRecipeRelation(models.Model):
 
 class Favorite(UserRecipeRelation):
     """Модель для избранных рецептов."""
-
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='favorites',
-        verbose_name='Пользователь'
-    )
-    recipe = models.ForeignKey(
-        Recipe,
-        on_delete=models.CASCADE,
-        related_name='favorited_by_users',
-        verbose_name='Рецепт'
-    )
 
     class Meta:
         verbose_name = 'Избранное'
@@ -198,19 +188,6 @@ class Favorite(UserRecipeRelation):
 
 class ShoppingCart(UserRecipeRelation):
     """Модель для корзины покупок."""
-
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='shopping_cart',
-        verbose_name='Пользователь'
-    )
-    recipe = models.ForeignKey(
-        Recipe,
-        on_delete=models.CASCADE,
-        related_name='shopping_cart_users',
-        verbose_name='Рецепт'
-    )
 
     class Meta:
         verbose_name = 'Корзина покупок'

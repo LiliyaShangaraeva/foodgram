@@ -268,14 +268,12 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         ingredients_data = validated_data.pop('ingredients')
         tags = validated_data.pop('tags')
 
-        recipe = super().update(instance, validated_data)
+        instance.tags.set(tags)
 
-        recipe.tags.set(tags)
+        instance.recipe_ingredients.all().delete()
+        self._create_recipe_ingredients(instance, ingredients_data)
 
-        recipe.recipe_ingredients.all().delete()
-        self._create_recipe_ingredients(recipe, ingredients_data)
-
-        return recipe
+        return super().update(instance, validated_data)
 
     def to_representation(self, instance):
         """После создания/обновления возвращаем детализированный рецепт."""
@@ -289,6 +287,12 @@ class FavoriteSerializer(serializers.ModelSerializer):
         model = Favorite
         fields = ('user', 'recipe')
 
+    def to_representation(self, instance):
+        return RecipeMinifiedSerializer(
+            instance.recipe,
+            context=self.context
+        ).data
+
 
 class ShoppingCartSerializer(serializers.ModelSerializer):
     """Сериализатор для добавления/удаления рецепта из списка покупок."""
@@ -296,3 +300,9 @@ class ShoppingCartSerializer(serializers.ModelSerializer):
     class Meta:
         model = ShoppingCart
         fields = ('user', 'recipe')
+
+    def to_representation(self, instance):
+        return RecipeMinifiedSerializer(
+            instance.recipe,
+            context=self.context
+        ).data

@@ -18,10 +18,9 @@ from api.filters import NameSearchFilter
 from api.pagination import BasePagination
 from api.permissions import IsAuthorOrReadOnly
 from api.serializers import (FavoriteSerializer, IngredientSerializer,
-                             RecipeCreateSerializer, RecipeMinifiedSerializer,
-                             RecipeSerializer, ShoppingCartSerializer,
-                             SubscriptionSerializer, TagSerializer,
-                             UserSerializer)
+                             RecipeCreateSerializer, RecipeSerializer,
+                             ShoppingCartSerializer, SubscriptionSerializer,
+                             TagSerializer, UserSerializer)
 from recipes.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
                             ShoppingCart, Tag)
 from users.models import Subscription, User
@@ -244,12 +243,6 @@ class RecipeViewSet(ModelViewSet):
             return RecipeCreateSerializer
         return RecipeSerializer
 
-    def get_permissions(self):
-        """Возвращает список разрешений в зависимости от действия (action)."""
-        if self.action in ['update', 'partial_update', 'destroy']:
-            return [IsAuthorOrReadOnly()]
-        return super().get_permissions()
-
     @action(detail=True, methods=['get'], url_path='get-link')
     def get_link(self, request, pk=None):
         """Возвращает короткую ссылку на рецепт без сохранения в БД."""
@@ -288,10 +281,7 @@ class RecipeViewSet(ModelViewSet):
         serializer.save()
 
         return Response(
-            RecipeMinifiedSerializer(
-                recipe,
-                context={'request': request},
-            ).data,
+            serializer.data,
             status=status.HTTP_201_CREATED,
         )
 
@@ -372,7 +362,7 @@ class RecipeViewSet(ModelViewSet):
         """Скачивает список покупок в формате .txt."""
         user = request.user
 
-        if not user.shopping_cart.exists():
+        if not user.shoppingcarts.exists():
             return Response(
                 {'error': 'Список покупок пуст.'},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -380,7 +370,7 @@ class RecipeViewSet(ModelViewSet):
 
         ingredients = (
             RecipeIngredient.objects
-            .filter(recipe__shopping_cart_users__user=user)
+            .filter(recipe__shoppingcarts__user=user)
             .values('ingredient__name', 'ingredient__measurement_unit')
             .annotate(total_amount=Sum('amount'))
             .order_by('ingredient__name')

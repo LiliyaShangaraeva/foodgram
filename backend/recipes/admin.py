@@ -60,7 +60,7 @@ class RecipeAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         """Добавляет к каждому рецепту поле favorites_count."""
         return super().get_queryset(request).annotate(
-            favorites_count=Count('favorited_by_users')
+            favorites_count=Count('favorites')
         ).prefetch_related('tags')
 
     @admin.display(description='В избранном')

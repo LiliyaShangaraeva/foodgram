@@ -27,25 +27,21 @@ class RecipeFilter(filters.FilterSet):
 
     def _boolean_filter(self, queryset, name, value, filter_field):
         user = getattr(self.request, 'user', None)
-        if not user or not user.is_authenticated:
+        if not user or not user.is_authenticated or not value:
             return queryset
 
-        filter_kwargs = {filter_field: user}
-
-        if value:
-            return queryset.filter(**filter_kwargs)
-        return queryset.exclude(**filter_kwargs)
+        return queryset.filter(**{filter_field: user})
 
     def filter_is_favorited(self, queryset, name, value):
         return self._boolean_filter(
             queryset, name, value,
-            filter_field='favorited_by_users__user',
+            filter_field='favorites__user',
         )
 
     def filter_is_shopping_cart_users(self, queryset, name, value):
         return self._boolean_filter(
             queryset, name, value,
-            filter_field='shopping_cart_users__user',
+            filter_field='shoppingcarts__user',
         )
 
 

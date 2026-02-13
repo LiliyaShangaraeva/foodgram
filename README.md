@@ -94,5 +94,23 @@ git push origin main
 sudo docker compose -f docker-compose.production.yml exec backend python manage.py createsuperuser
 ```
 
+### Документация и развернутый проект
+
+- Документация API доступна по адресу:  
+  [https://shangaraeva.ddns.net/api/docs/](https://shangaraeva.ddns.net/api/docs/)
+
+- Развернутый проект доступен по адресу:  
+  [https://shangaraeva.ddns.net/](https://shangaraeva.ddns.net/)
+
+- Также документацию можно посмотреть локально.
+
+Для этого находясь в папке infra, выполните в терминале команду
+
+```bash
+docker compose up
+```
+
+И перейдите по ссылке: [http://localhost/api/docs/](http://localhost/api/docs/)
+
 ### Автор:
 [Лилия Шангараева](https://github.com/LiliyaShangaraeva)

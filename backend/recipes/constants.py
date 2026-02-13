@@ -1,3 +1,7 @@
+from pathlib import Path
+
+from django.conf import settings
+
 DEFAULT_PAGE_SIZE = 6
 PAGE_SIZE_QUERY_PARAM = 'limit'
 NAME_MAX_LENGTH = 256
@@ -10,3 +14,4 @@ MAX_COOKING_TIME = 32767
 MIN_INGREDIENT_AMOUNT = 1
 MAX_INGREDIENT_AMOUNT = 32767
 RECIPE_NAME_MAX_LENGTH = 25
+INGREDIENTS_PATH = Path(settings.BASE_DIR) / 'data' / 'ingredients.json'
