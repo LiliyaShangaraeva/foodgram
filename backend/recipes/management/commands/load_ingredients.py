@@ -1,6 +1,9 @@
 import json
+from pathlib import Path
 
+from django.conf import settings
 from django.core.management.base import BaseCommand
+
 from recipes.models import Ingredient
 
 
@@ -11,7 +14,7 @@ class Command(BaseCommand):
         parser.add_argument(
             '--path',
             type=str,
-            default='backend/data/ingredients.json',
+            default=Path(settings.BASE_DIR) / 'data' / 'ingredients.json',
             help='Путь к файлу с ингредиентами'
         )
 
